@@ -1,10 +1,10 @@
-# AI Notebook
+# personal-web
 
-Ali Abnar’s personal notebook and project collection, implemented from the supplied Figma home frame. English throughout, with light and dark themes and layouts for phones, tablets, and desktop browsers.
+AI Notebook is Ali Abnar’s personal notebook and project collection. It includes English content, light and dark themes, and responsive layouts for phones, tablets, and desktop browsers.
 
 ## Run locally
 
-Requires Node.js 22 or newer and pnpm. The project is located at `/Users/a.abnar/Desktop/ali-abnar-website`.
+Requires Node.js 22 or newer and pnpm 12.
 
 ```sh
 pnpm install --frozen-lockfile
@@ -21,11 +21,11 @@ pnpm start
 ## Stack
 
 - Next.js 16 App Router, React 19, and strict TypeScript.
-- Tailwind CSS 4 with the actual Figma color, typography, spacing, and radius values in shared tokens.
-- Radix Dialog and shadcn-compatible component conventions for accessible interactions.
+- Tailwind CSS 4 with shared color, typography, spacing, and radius tokens.
+- Radix Dialog and small typed UI primitives for accessible interactions.
 - Self-hosted Inter variable font; no Google Fonts request at runtime or build time.
 - Server-rendered pages, static generation for editorial content, and hourly revalidation for GitHub projects.
-- Playwright, axe, ESLint, Prettier, and Lighthouse for verification.
+- Playwright, axe, ESLint, and Prettier for verification.
 
 ## Features
 
@@ -56,10 +56,8 @@ src/
   content/              Typed editorial content and GitHub fallback data
   hooks/                Browser persistence
   lib/                  Server GitHub integration, site config, utilities
-scripts/                Data refresh and screenshot capture
+scripts/                GitHub snapshot refresh
 tests/                  Browser and accessibility checks
-design/                 Extracted Figma CSS and implementation screenshots
-docs/                   Architecture and design notes
 ```
 
 ## Checks
@@ -72,5 +70,8 @@ pnpm test
 pnpm format:check
 ```
 
-Browser tests use the installed Google Chrome and cover desktop, tablet, and mobile. The production build must exist before the tests start. See `docs/design.md` for reference measurements, deliberate accessibility adjustments, and the limits of design verification. The verified results are recorded in `docs/validation.md`.
-# personal-web
+Browser tests use the installed Google Chrome and cover desktop, tablet, mobile, and narrow navigation. Run `pnpm build` before `pnpm test`. Test reports and build output are ignored by Git.
+
+## Design and content
+
+The home layout follows the [supplied Figma frame](https://www.figma.com/design/oVuDO2VKh2u3IZ2A74YBEd/Untitled?node-id=3-29985). A full pixel comparison against all Figma frames has not been verified. Supporting article copy should be reviewed before public publication.
