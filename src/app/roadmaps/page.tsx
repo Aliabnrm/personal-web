@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { paths } from "@/content/notebook";
-import { PageIntro, PathCard } from "@/components/notebook/content";
+import { paths } from "@/content/learning-paths";
+import { PageIntro, PathCard } from "@/components/content/content";
 import { ButtonLink } from "@/components/ui/button";
 export const metadata: Metadata = { title: "Learning paths" };
 export default function RoadmapsPage() {
@@ -11,6 +11,7 @@ export default function RoadmapsPage() {
         title="One path instead of a hundred open tabs"
         description="A guided way to move from curiosity to understanding. Choose a path, make something, and return with better questions."
       />
+      <h2 className="sr-only">Available learning paths</h2>
       <div className="grid gap-4 md:grid-cols-3">
         {paths.map((path) => (
           <PathCard key={path.slug} path={path} />

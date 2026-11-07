@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { paths } from "@/content/notebook";
-import { PageIntro } from "@/components/notebook/content";
-import { PathProgress } from "@/components/notebook/path-progress";
+import { paths } from "@/content/learning-paths";
+import { PageIntro } from "@/components/content/content";
+import { PathProgress } from "@/components/content/path-progress";
 import { Badge } from "@/components/ui/badge";
 export function generateStaticParams() {
   return paths.map((p) => ({ slug: p.slug }));

@@ -1,4 +1,6 @@
-import { writeFile } from "node:fs/promises";
+import { rename, writeFile } from "node:fs/promises";
+import { normalizeRepositories } from "../src/lib/repository.ts";
+
 const response = await fetch(
   "https://api.github.com/users/Aliabnrm/repos?per_page=100&sort=updated",
   {
@@ -12,26 +14,10 @@ const response = await fetch(
   },
 );
 if (!response.ok)
-  throw new Error(
-    `GitHub returned ${response.status}; the saved snapshot has not been changed.`,
-  );
-const repositories = await response.json();
-const keys = [
-  "name",
-  "description",
-  "html_url",
-  "homepage",
-  "language",
-  "stargazers_count",
-  "forks_count",
-  "updated_at",
-  "topics",
-];
-const snapshot = repositories
-  .filter((r) => !r.fork && !r.archived)
-  .map((r) => Object.fromEntries(keys.map((k) => [k, r[k] ?? null])));
-await writeFile(
-  new URL("../src/content/github-snapshot.json", import.meta.url),
-  JSON.stringify(snapshot, null, 2) + "\n",
-);
+  throw new Error(`GitHub returned ${response.status}; snapshot unchanged.`);
+const snapshot = normalizeRepositories(await response.json());
+const target = new URL("../src/content/github-snapshot.json", import.meta.url);
+const temporary = new URL(`${target.href}.tmp`);
+await writeFile(temporary, JSON.stringify(snapshot, null, 2) + "\n");
+await rename(temporary, target);
 console.log(`Saved ${snapshot.length} public repositories.`);

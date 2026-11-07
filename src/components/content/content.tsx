@@ -6,7 +6,7 @@ import type {
   LearningPath,
   Note,
   Resource,
-} from "@/content/notebook";
+} from "@/content/types";
 
 export function PageIntro({
   eyebrow,
@@ -32,14 +32,18 @@ export function SectionHeading({
   title,
   href,
   label,
+  id,
 }: {
   title: string;
   href?: string;
   label?: string;
+  id?: string;
 }) {
   return (
     <div className="flex min-h-[45px] items-center justify-between gap-4">
-      <h2 className="section-title">{title}</h2>
+      <h2 id={id} className="section-title">
+        {title}
+      </h2>
       {href && (
         <Link href={href} className="text-link shrink-0 text-[13px]">
           {label} →
@@ -100,7 +104,7 @@ export function NoteRow({ note }: { note: Note }) {
             {note.title}
           </Link>
         </h3>
-        <Badge outlined={note.status === "Complete"}>{note.status}</Badge>
+        <span className="shrink-0 text-[11px] text-muted">{note.kind}</span>
       </div>
       <p className="mt-1.5 text-xs text-muted">{note.description}</p>
     </article>

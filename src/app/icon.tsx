@@ -13,11 +13,11 @@ export default function Icon() {
         height: 32,
         borderRadius: 6,
         color: "white",
-        fontSize: 19,
+        fontSize: 15,
         fontWeight: 700,
       }}
     >
-      N
+      aa
     </div>,
     size,
   );

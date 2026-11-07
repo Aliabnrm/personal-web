@@ -1,9 +1,13 @@
 "use client";
 import { useDeferredValue, useState } from "react";
 import { ExternalLink, Github, Search, Star } from "lucide-react";
-import type { Repository } from "@/lib/github";
+import type { Repository } from "@/lib/repository";
 import { Badge } from "@/components/ui/badge";
-export function ProjectList({ repositories }: { repositories: Repository[] }) {
+export function RepositoryList({
+  repositories,
+}: {
+  repositories: Repository[];
+}) {
   const [query, setQuery] = useState("");
   const [language, setLanguage] = useState("All languages");
   const term = useDeferredValue(query).trim().toLowerCase();
@@ -68,7 +72,7 @@ export function ProjectList({ repositories }: { repositories: Repository[] }) {
                 <Github size={22} className="text-primary" />
                 {repo.language && <Badge>{repo.language}</Badge>}
               </div>
-              <h2 className="break-words text-xl font-semibold">
+              <h3 className="break-words text-xl font-semibold">
                 <a
                   href={repo.html_url}
                   target="_blank"
@@ -77,7 +81,7 @@ export function ProjectList({ repositories }: { repositories: Repository[] }) {
                 >
                   {repo.name}
                 </a>
-              </h2>
+              </h3>
               <p className="flex-1 text-sm text-muted">
                 {repo.description ||
                   `Explore the source code and documentation for ${repo.name.replaceAll("-", " ")}.`}

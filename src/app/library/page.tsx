@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { resources } from "@/content/notebook";
-import { PageIntro } from "@/components/notebook/content";
-import { Collection } from "@/components/notebook/collection";
+import { resources } from "@/content/resources";
+import { PageIntro } from "@/components/content/content";
+import { Collection } from "@/components/content/collection";
 export const metadata: Metadata = { title: "Library" };
 export default function LibraryPage() {
   return (

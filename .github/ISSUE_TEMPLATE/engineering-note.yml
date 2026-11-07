@@ -1,0 +1,48 @@
+name: Capture an engineering note
+description: Turn a real project decision or a short voice transcript into a writing brief.
+title: "[Note] "
+body:
+  - type: dropdown
+    id: project
+    attributes:
+      label: Related project
+      options:
+        - Document Q&A
+        - FastFactor
+        - Salon Booking
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem or question came up?
+      description: A rough note or your own voice transcript is enough. Use English or Persian.
+    validations:
+      required: true
+  - type: textarea
+    id: attempt
+    attributes:
+      label: What did you try, and why?
+    validations:
+      required: true
+  - type: textarea
+    id: observation
+    attributes:
+      label: What actually happened?
+      description: Include failures, conditions, measurements, and what remains unknown. Keep private data out.
+    validations:
+      required: true
+  - type: textarea
+    id: next
+    attributes:
+      label: What would you do next?
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Source links
+      description: Link the commit, code, experiment configuration, or report behind the note.
+    validations:
+      required: true

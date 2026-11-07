@@ -1,77 +1,90 @@
-# personal-web
+# Ali Abnar — personal site
 
-AI Notebook is Ali Abnar’s personal notebook and project collection. It includes English content, light and dark themes, and responsive layouts for phones, tablets, and desktop browsers.
+A professional portfolio and engineering notebook for software/product engineering with an applied AI focus. English content, light and dark themes, and responsive layouts for mobile, tablet, and desktop.
 
-## Run locally
+## Local development
 
-Requires Node.js 22 or newer and pnpm 12.
+Requires Node.js **22.18+** (Node 24 recommended) and **pnpm 12**. The Node minimum also supports native TypeScript imports in the maintenance and domain-check scripts.
 
 ```sh
 pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-Open [localhost:3000](http://localhost:3000). For a production preview:
+For a production preview, run `pnpm build`, then `pnpm start`. Open [localhost:3000](http://localhost:3000).
 
-```sh
-pnpm build
-pnpm start
-```
+## What is included
 
-## Stack
+- Personal introduction, selected work, résumé download, professional experience, and direct email/LinkedIn/Telegram contact.
+- Three source-linked case studies: Document Q&A, FastFactor, and Salon Booking. Decisions, tradeoffs, measurements, conditions, and limits are explicit. Evidence links are pinned to the reviewed Git revisions.
+- Writing hub, project-backed notes, annotated resources, and learning paths. Historical weekly URLs redirect to the writing hub; replaced sample notes have explicit redirects.
+- A browser-only retrieval playground using labeled teaching fixtures, reciprocal rank fusion, and an adjustable context budget. It makes no model/API calls.
+- Search across case studies, notes, resources, learning paths, and public repositories. Public GitHub metadata is cached for an hour, with a committed fallback.
+- Per-browser bookmarks, learning progress, and theme preference. These are not accounts or cross-device sync.
+- RSS, sitemap, canonical metadata on primary pages, social preview, Person structured data, and 404/error states.
 
-- Next.js 16 App Router, React 19, and strict TypeScript.
-- Tailwind CSS 4 with shared color, typography, spacing, and radius tokens.
-- Radix Dialog and small typed UI primitives for accessible interactions.
-- Self-hosted Inter variable font; no Google Fonts request at runtime or build time.
-- Server-rendered pages, static generation for editorial content, and hourly revalidation for GitHub projects.
-- Playwright, axe, ESLint, and Prettier for verification.
+## Architecture
 
-## Features
-
-- Home, weekly archive and issues, learning paths and chapters, library, notes, about, now, and projects.
-- Real public projects from [Aliabnrm](https://github.com/Aliabnrm), with language filtering and a saved fallback if GitHub is unavailable.
-- Search across editorial content and public projects; working empty and filtered states.
-- Theme preference, saved notes/resources, and learning progress persist in the current browser.
-- Mobile navigation with focus management, keyboard support, RSS, sitemap, social preview, and meaningful 404/error states.
-- Read-only server endpoints at `/api/projects` and `/api/search?q=retrieval`.
-
-## Configuration and deployment
-
-Copy `.env.example` to `.env.local` if needed. Set `NEXT_PUBLIC_SITE_URL` to the real production origin before the production build, so feed, sitemap, and social metadata use the correct address. `GITHUB_TOKEN` is optional and remains server-side; public repositories work without it.
-
-Deploy to a Node.js host or a Next.js platform such as Vercel. Use `pnpm install --frozen-lockfile`, `pnpm build`, and `pnpm start`. A static-only host cannot run the search API and server-side GitHub revalidation.
-
-No database is needed for this public read-only content site. Saved learning state is per browser and is not account-based or synchronized between devices. Editorial content lives in `src/content/notebook.ts`; edit this file to publish your own notes, resources, and weekly issue summaries. Weekly article bodies live in `src/content/weekly-details.ts` and use the same issue slugs. Update the offline GitHub snapshot with `pnpm sync:github`.
-
-## Structure
+Next.js App Router and React with strict TypeScript. Tailwind CSS uses the existing blue palette and shared design tokens; Radix Dialog handles mobile navigation. Inter is self-hosted. Editorial routes are statically generated, interactive components are small client boundaries, and GitHub requests stay on the server. No database, CMS, or paid AI service is required.
 
 ```text
 src/
-  app/                  Routes, metadata, RSS, and server API handlers
+  app/                  Pages, metadata, RSS, and read-only API handlers
   components/
-    layout/             Shared header and footer
-    notebook/           Content views and interactive collections
-    ui/                 Small reusable design primitives
-  content/              Typed editorial content and GitHub fallback data
-  hooks/                Browser persistence
-  lib/                  Server GitHub integration, site config, utilities
-scripts/                GitHub snapshot refresh
-tests/                  Browser and accessibility checks
+    content/            Articles, collections, search, and reading tools
+    layout/             Shared navigation and footer
+    profile/            Contact presentation
+    ui/                 Small reusable primitives
+    work/               Project cards, repository list, retrieval playground
+  content/
+    projects.ts         Reviewed case studies and pinned evidence
+    profile.ts          Experience and areas of contribution
+    notes.ts            Published project-backed writing
+    resources.ts        Annotated external references
+    learning-paths.ts   Curated study routes
+    types.ts            Editorial content contracts
+    github-snapshot.json  Public repository fallback
+  hooks/                Resilient browser persistence
+  lib/                  Site config, GitHub adapter, search, retrieval example
+public/resume/          Original supplied résumé PDF
+scripts/                Repository snapshot refresh
+.github/                Quality checks, maintenance workflow, note-capture form
+tests/                  Domain, browser, and automated accessibility checks
 ```
 
-## Checks
+## Editing content without maintaining a publishing schedule
+
+1. After a useful project decision, record four things: the problem, what you tried, what happened, and the next step. A short voice transcript is enough input.
+2. Use **Capture an engineering note** in GitHub Issues to collect that input and source links. This form captures a brief; it does not publish or generate text.
+3. Prepare a short English note in `src/content/notes.ts`, connect its project, and link the exact source revision. AI can help edit a draft, but personal claims and measurements need review.
+4. Review the diff and merge a normal PR. Search, static routes, and RSS pick up published notes at build time. There is no weekly publishing obligation.
+
+Update case-study measurements only after reviewing the source report and its conditions. `src/lib/site.ts` owns identity and contact links. The supplied PDF is preserved byte-for-byte; its original contact details may differ from the current site contact information. Replace the PDF when you have a revised résumé.
+
+## Automation
+
+`pnpm sync:github` validates and atomically updates the public repository snapshot. A failed request leaves the committed file intact.
+
+The **Refresh public GitHub metadata** workflow runs weekly or manually and proposes a draft PR only when metadata changes. It does not change case studies, claim new achievements, generate articles, or auto-merge. Enable GitHub Actions' permission to create pull requests in the repository settings before using it. The default GitHub token is sufficient; no external service key is required.
+
+The **Quality checks** workflow runs formatting, lint, generated route types, domain checks, the production build, and Chromium browser tests. The maintenance job runs its own checks because PRs created with the default GitHub token do not trigger ordinary PR workflows.
+
+## Configuration and deployment
+
+Set `NEXT_PUBLIC_SITE_URL` to the real production origin **before building**. Feed, sitemap, canonical links, and structured data use this origin. `.env.example` lists the settings. `GITHUB_TOKEN` is optional, remains server-side, and raises the API rate limit.
+
+Deploy to a Node host or Next.js platform such as Vercel using `pnpm install --frozen-lockfile` and `pnpm build`. A static-only host cannot run server search or GitHub revalidation. Deployment is separate from local verification.
+
+Read-only endpoints: `/api/projects` and `/api/search?q=retrieval`.
+
+## Verification
 
 ```sh
-pnpm lint
-pnpm typecheck
-pnpm build
-pnpm test
 pnpm format:check
+pnpm check
+pnpm test:e2e
 ```
 
-Browser tests use the installed Google Chrome and cover desktop, tablet, mobile, and narrow navigation. Run `pnpm build` before `pnpm test`. Test reports and build output are ignored by Git.
+`pnpm check` runs lint, `next typegen` and TypeScript, domain tests, and the production build. Browser tests require that build and start their own production server on port 3000. Local tests use installed Google Chrome; CI uses Playwright Chromium. Tests cover three viewport profiles, navigation/focus, theme persistence, case studies, contact and résumé delivery, search, malformed local storage, learning progress, repository filters, the interactive experiment, content routes, redirects, feeds, and automated WCAG checks in both themes. Build and test artifacts are ignored.
 
-## Design and content
-
-The home layout follows the [supplied Figma frame](https://www.figma.com/design/oVuDO2VKh2u3IZ2A74YBEd/Untitled?node-id=3-29985). A full pixel comparison against all Figma frames has not been verified. Supporting article copy should be reviewed before public publication.
+The design preserves the supplied Figma palette while adapting the information architecture to the professional portfolio brief. This is not a claim of pixel equivalence to every original Figma frame.

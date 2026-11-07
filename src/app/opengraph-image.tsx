@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-export const alt = "AI Notebook — Learn, connect, return.";
+export const alt = "Ali Abnar — Software & Product Engineer";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 export default function Image() {
@@ -24,17 +24,17 @@ export default function Image() {
           marginBottom: 40,
         }}
       >
-        AI Notebook / Ali Abnar
+        Ali Abnar / Selected work & engineering notes
       </div>
       <div
         style={{
           display: "flex",
-          fontSize: 76,
+          fontSize: 64,
           fontWeight: 600,
           letterSpacing: -3,
         }}
       >
-        Learn, connect, return.
+        Software. Product. Applied AI.
       </div>
       <div
         style={{
@@ -44,7 +44,7 @@ export default function Image() {
           marginTop: 30,
         }}
       >
-        A personal notebook on AI, learning, and building.
+        Thoughtful interfaces. Useful systems. Inspectable evidence.
       </div>
       <div
         style={{

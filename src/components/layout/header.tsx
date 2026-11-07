@@ -4,32 +4,36 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useTheme } from "next-themes";
 import * as Dialog from "@radix-ui/react-dialog";
-import { Menu, Moon, Rss, Search, Sun, X } from "lucide-react";
-import { navigation } from "@/lib/site";
+import { Menu, Moon, Search, Sun, X } from "lucide-react";
+import { navigation, site } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 function Identity() {
   return (
-    <Link
-      href="/"
-      aria-label="AI Notebook home"
-      className="flex shrink-0 items-center gap-[10px] text-primary"
-    >
+    <Link href="/" className="flex shrink-0 items-center gap-2.5">
       <span
         aria-hidden="true"
-        className="flex h-8 w-7 flex-col gap-1 rounded-[3px] border-[1.5px] border-primary p-[6px]"
+        className="flex size-8 items-center justify-center rounded-md border border-primary/25 bg-accent font-mono text-xs font-semibold text-primary"
       >
-        <span className="mt-px h-px w-[14px] bg-primary" />
-        <span className="h-px w-[10px] bg-primary" />
-        <span className="h-px w-[14px] bg-primary" />
+        aa<span className="text-primary/50">.</span>
       </span>
-      <span className="text-[18px] font-semibold leading-[1.95] sm:text-[21px]">
-        AI Notebook
+      <span className="text-base font-semibold tracking-tight sm:text-lg">
+        Ali Abnar
+        <span aria-hidden="true" className="text-primary">
+          .
+        </span>
       </span>
+      <span className="sr-only"> home</span>
     </Link>
   );
 }
-
+function activePath(pathname: string, href: string) {
+  if (href === "/writing")
+    return ["/writing", "/notes", "/library", "/roadmaps", "/lab"].some(
+      (path) => pathname === path || pathname.startsWith(`${path}/`),
+    );
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
 export function Header() {
   const pathname = usePathname();
   const router = useRouter();
@@ -46,64 +50,55 @@ export function Header() {
   }, [router]);
   return (
     <header className="border-b border-border bg-background">
-      <div className="page-container flex h-16 items-center justify-between gap-3">
+      <div className="page-container flex h-[76px] items-center justify-between gap-3">
         <Identity />
         <nav
           aria-label="Main navigation"
-          className="hidden items-start gap-[25px] lg:flex"
+          className="hidden items-center gap-8 md:flex"
         >
           {navigation.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              aria-current={pathname.startsWith(item.href) ? "page" : undefined}
+              aria-current={
+                activePath(pathname, item.href) ? "page" : undefined
+              }
               className={cn(
-                "text-[13px] leading-[1.95] text-primary hover:underline",
-                pathname.startsWith(item.href) &&
-                  "underline decoration-2 underline-offset-8",
+                "inline-flex min-h-11 items-center text-[13px] transition-colors hover:text-primary",
+                activePath(pathname, item.href)
+                  ? "font-semibold text-primary"
+                  : "text-muted",
               )}
             >
               {item.label}
             </Link>
           ))}
         </nav>
-        <div className="flex items-center gap-0 sm:gap-4">
+        <div className="flex items-center gap-0 sm:gap-1">
           <Link
             href="/search"
-            aria-label="Search the notebook"
-            className="flex min-h-11 w-10 items-center gap-[10px] rounded-md text-primary hover:bg-accent sm:w-auto sm:px-1.5"
+            aria-label="Search the site"
+            className="flex size-11 items-center justify-center rounded-md text-muted hover:bg-accent hover:text-primary"
           >
-            <kbd className="hidden font-sans text-[11px] text-muted sm:inline">
-              ⌘ K
-            </kbd>
-            <span className="flex h-11 w-10 shrink-0 items-center justify-center">
-              <Search size={18} strokeWidth={1.6} />
-            </span>
+            <Search size={18} strokeWidth={1.7} />
           </Link>
-          <a
-            href="/feed.xml"
-            aria-label="RSS feed"
-            className="hidden h-11 w-10 items-center justify-center rounded-md text-primary hover:bg-accent sm:flex"
-          >
-            <Rss size={18} strokeWidth={1.6} />
-          </a>
           <button
             type="button"
             onClick={() =>
               setTheme(resolvedTheme === "dark" ? "light" : "dark")
             }
             aria-label="Toggle color theme"
-            className="flex h-11 w-10 items-center justify-center rounded-md text-primary hover:bg-accent"
+            className="flex size-11 items-center justify-center rounded-md text-muted hover:bg-accent hover:text-primary"
           >
-            <Moon size={18} strokeWidth={1.6} className="dark:hidden" />
-            <Sun size={18} strokeWidth={1.6} className="hidden dark:block" />
+            <Moon size={18} strokeWidth={1.7} className="dark:hidden" />
+            <Sun size={18} strokeWidth={1.7} className="hidden dark:block" />
           </button>
           <Dialog.Root>
             <Dialog.Trigger asChild>
               <button
                 type="button"
                 aria-label="Open navigation"
-                className="flex h-11 w-10 items-center justify-center rounded-md text-primary hover:bg-accent lg:hidden"
+                className="flex size-11 items-center justify-center rounded-md text-primary hover:bg-accent md:hidden"
               >
                 <Menu size={20} />
               </button>
@@ -112,10 +107,10 @@ export function Header() {
               <Dialog.Overlay className="fixed inset-0 z-40 bg-black/35 backdrop-blur-xs" />
               <Dialog.Content className="fixed inset-y-0 right-0 z-50 w-[min(340px,90vw)] overflow-y-auto border-l border-border bg-background p-6 shadow-xl">
                 <Dialog.Title className="text-xl font-semibold">
-                  AI Notebook
+                  Ali Abnar
                 </Dialog.Title>
                 <Dialog.Description className="mt-1 text-sm text-muted">
-                  Find your next place to explore.
+                  Work, writing, and ways to connect.
                 </Dialog.Description>
                 <Dialog.Close asChild>
                   <button
@@ -129,18 +124,17 @@ export function Header() {
                   aria-label="Mobile navigation"
                   className="mt-8 flex flex-col gap-1"
                 >
-                  {[
-                    { label: "Home", href: "/" },
-                    ...navigation,
-                    { label: "Projects", href: "/projects" },
-                    { label: "Now", href: "/now" },
-                  ].map((item) => (
+                  {[{ label: "Home", href: "/" }, ...navigation].map((item) => (
                     <Dialog.Close key={item.href} asChild>
                       <Link
                         className={cn(
-                          "rounded-md px-3 py-3 text-base text-primary hover:bg-accent",
-                          pathname === item.href && "bg-accent font-semibold",
+                          "rounded-md px-3 py-3 text-base hover:bg-accent",
+                          pathname === item.href &&
+                            "bg-accent font-semibold text-primary",
                         )}
+                        aria-current={
+                          pathname === item.href ? "page" : undefined
+                        }
                         href={item.href}
                       >
                         {item.label}
@@ -149,11 +143,11 @@ export function Header() {
                   ))}
                 </nav>
                 <a
-                  className="mt-8 inline-flex min-h-11 items-center gap-3 text-primary"
-                  href="/feed.xml"
+                  className="text-link mt-8 inline-flex min-h-11 items-center text-sm"
+                  href={site.resume}
+                  download
                 >
-                  <Rss size={18} />
-                  Subscribe via RSS
+                  Download résumé ↗
                 </a>
               </Dialog.Content>
             </Dialog.Portal>

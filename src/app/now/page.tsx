@@ -1,51 +1,89 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { PageIntro } from "@/components/notebook/content";
-export const metadata: Metadata = { title: "Now" };
+import { PageIntro } from "@/components/content/content";
+import { Contact } from "@/components/profile/contact";
+import { projects } from "@/content/projects";
+import { site } from "@/lib/site";
+export const metadata: Metadata = {
+  title: "Now",
+  description:
+    "Ali Abnar's current focus: product engineering, trustworthy document AI, and useful technical writing.",
+  alternates: { canonical: "/now" },
+};
 export default function NowPage() {
   return (
     <div className="page-stack">
       <PageIntro
         eyebrow="NOW"
-        title="A snapshot of the notebook."
-        description="What this space is exploring: useful AI, better interfaces, and the practice of learning by building."
-      />
-      <div className="max-w-[740px] article-body">
+        title="Building a clearer connection between product and AI."
+        description="A snapshot of my direction, the work that represents it, and the questions I want to explore next."
+      >
+        <p className="text-xs text-muted">
+          Last updated <time dateTime={site.updated}>November 7, 2026</time>
+        </p>
+      </PageIntro>
+      <div className="max-w-[760px] article-body">
         <section>
-          <h2>Building in the open</h2>
+          <h2>The direction</h2>
           <p>
-            The{" "}
-            <Link href="/projects" className="text-link">
-              projects collection
-            </Link>{" "}
-            reflects the latest public work on GitHub, from frontend
-            applications to backend systems.
+            My focus for the next stage is Software / Product Engineering with
+            applied AI: connecting strong frontend foundations to useful
+            end-to-end systems.
+          </p>
+          <p>
+            I’m especially interested in interfaces that make system behavior
+            understandable, from order and booking workflows to document answers
+            with inspectable evidence.
           </p>
         </section>
         <section>
-          <h2>Following the questions</h2>
+          <h2>The work behind that direction</h2>
+          <ul>
+            {projects.map((p) => (
+              <li key={p.slug}>
+                <Link className="text-link" href={`/projects/${p.slug}`}>
+                  {p.title}
+                </Link>{" "}
+                — {p.focus.toLowerCase()}.
+              </li>
+            ))}
+          </ul>
           <p>
-            The current learning paths focus on AI fundamentals, LLM
-            engineering, and building agents. Each path connects practical
-            resources to a small, repeatable next step.
+            The case studies include their current limits and next validation
+            steps. This page is a dated snapshot, rather than an automatic claim
+            that every repository is actively being developed.
           </p>
         </section>
         <section>
-          <h2>Keeping a useful trail</h2>
+          <h2>Questions worth discussing</h2>
+          <ul>
+            <li>
+              How should an AI interface communicate missing evidence and
+              uncertainty?
+            </li>
+            <li>Which product boundaries make a small system useful?</li>
+            <li>
+              How can a frontend make retries, streaming, and partial failure
+              understandable?
+            </li>
+            <li>
+              What evidence is enough to justify a more complex architecture?
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h2>A sustainable writing practice</h2>
           <p>
-            Weekly issues and the notes garden collect ideas that are worth
-            another visit. Start with{" "}
-            <Link href="/this-week" className="text-link">
-              the latest issue
-            </Link>{" "}
-            or explore{" "}
-            <Link href="/notes" className="text-link">
-              the notes
-            </Link>{" "}
-            by topic.
+            Short notes tied to actual code, decisions, and experiments. The aim
+            is a useful trail that helps me revisit a problem and gives others
+            enough context to question or reuse the approach.
           </p>
+          <Link href="/writing" className="text-link">
+            Explore the engineering notebook →
+          </Link>
         </section>
       </div>
+      <Contact compact />
     </div>
   );
 }

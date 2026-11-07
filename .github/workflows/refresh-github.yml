@@ -1,0 +1,43 @@
+name: Refresh public GitHub metadata
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * 1"
+permissions:
+  contents: read
+concurrency:
+  group: github-metadata-refresh
+  cancel-in-progress: false
+jobs:
+  propose-refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: pnpm/action-setup@f40ffcd9367d9f12939873eb1018b921a783ffaa # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm sync:github
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - run: pnpm exec prettier --write src/content/github-snapshot.json
+      - run: pnpm check
+      - uses: peter-evans/create-pull-request@22a9089034f40e5a961c8808d113e2c98fb63676 # v7
+        with:
+          branch: automation/github-metadata
+          delete-branch: true
+          add-paths: src/content/github-snapshot.json
+          commit-message: "chore: refresh public GitHub metadata"
+          title: "chore: refresh public GitHub metadata"
+          body: |
+            Refreshes the committed fallback from Aliabnrm's public repositories.
+
+            Case studies, personal statements, and measured results are unchanged.
+            Review the snapshot before merging. Build, lint, types, and domain checks ran in this workflow.
+          draft: true

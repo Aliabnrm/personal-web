@@ -28,11 +28,15 @@ export function useLocalSet(key: string) {
     /* Ignore damaged local data. */
   }
   const toggle = (id: string) => {
+    let values: string[] = [];
     try {
       const current: unknown = JSON.parse(read());
-      const values: string[] = Array.isArray(current)
-        ? current.filter((x): x is string => typeof x === "string")
-        : [];
+      if (Array.isArray(current))
+        values = current.filter((x): x is string => typeof x === "string");
+    } catch {
+      /* Start fresh when saved data is damaged. */
+    }
+    try {
       localStorage.setItem(
         key,
         JSON.stringify(
@@ -42,10 +46,10 @@ export function useLocalSet(key: string) {
         ),
       );
       window.dispatchEvent(new Event(CHANGE_EVENT));
+      return true;
     } catch {
       return false;
     }
-    return true;
   };
   return { items, toggle };
 }

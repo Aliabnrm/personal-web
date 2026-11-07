@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { searchItems } from "@/content/notebook";
+import { getSearchIndex } from "@/lib/search-index";
 import { getRepositories } from "@/lib/github";
-import { PageIntro } from "@/components/notebook/content";
-import { NotebookSearch } from "@/components/notebook/search";
+import { PageIntro } from "@/components/content/content";
+import { SiteSearch } from "@/components/content/search";
 export const metadata: Metadata = {
   title: "Search",
   robots: { index: false, follow: true },
@@ -10,28 +10,22 @@ export const metadata: Metadata = {
 export default async function SearchPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string }>;
+  searchParams: Promise<{ q?: string | string[] }>;
 }) {
   const { q } = await searchParams;
   const { repositories } = await getRepositories();
-  const index = [
-    ...searchItems,
-    ...repositories.map((r) => ({
-      title: r.name,
-      description: r.description || `Public project by Ali Abnar.`,
-      type: "Project",
-      href: r.html_url,
-      keywords: r.language || "",
-    })),
-  ];
+  const index = getSearchIndex(repositories);
   return (
     <div className="page-stack">
       <PageIntro
         eyebrow="SEARCH"
         title="Find a connection."
-        description="One place to search the notebook, from a passing thought to a practical project."
+        description="Search selected work, technical notes, useful resources, and public code."
       />
-      <NotebookSearch index={index} initialQuery={q?.slice(0, 200) || ""} />
+      <SiteSearch
+        index={index}
+        initialQuery={(Array.isArray(q) ? q[0] : q)?.slice(0, 200) || ""}
+      />
     </div>
   );
 }

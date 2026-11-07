@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Check, ExternalLink } from "lucide-react";
-import type { LearningPath } from "@/content/notebook";
+import type { LearningPath } from "@/content/types";
 import { useLocalSet } from "@/hooks/use-local-set";
 export function PathProgress({ path }: { path: LearningPath }) {
   const { items, toggle } = useLocalSet(`ai-notebook:progress:${path.slug}:v1`);

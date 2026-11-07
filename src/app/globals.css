@@ -6,7 +6,7 @@
   color-scheme: light;
   --background: #ffffff;
   --foreground: #0f172a;
-  --muted: #64748b;
+  --muted: #5e7088;
   --primary: #2563eb;
   --primary-hover: #1d4ed8;
   --primary-foreground: #ffffff;
@@ -237,7 +237,126 @@
   }
 }
 
-/* Preserve the Figma palette while meeting AA contrast on pale blue surfaces. */
-:root:not(.dark) .bg-accent .text-muted {
-  color: #5e7088;
+@layer components {
+  .home-stack {
+    gap: 64px;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: 72px;
+    align-items: center;
+    padding-block: 28px 8px;
+  }
+  .hero-title {
+    font-size: clamp(38px, 4.5vw, 62px);
+    font-weight: 600;
+    line-height: 1.14;
+    letter-spacing: -0.045em;
+    text-wrap: balance;
+  }
+  .focus-card {
+    padding: 28px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--panel);
+    box-shadow: 0 6px 28px -16px
+      color-mix(in srgb, var(--primary) 24%, transparent);
+  }
+  .system-diagram {
+    margin: 0;
+    padding: 28px;
+    background-color: var(--accent);
+    background-image: radial-gradient(
+      color-mix(in srgb, var(--primary) 14%, transparent) 1px,
+      transparent 1px
+    );
+    background-size: 18px 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  .contact-panel {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 32px;
+    background: var(--accent);
+  }
+  .contact-link {
+    display: inline-flex;
+    min-height: 44px;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--background);
+    padding: 9px 13px;
+    color: var(--primary);
+    font-size: 12px;
+    overflow-wrap: anywhere;
+  }
+  .contact-link:hover {
+    border-color: var(--primary);
+  }
+  @media (max-width: 1023px) {
+    .hero-grid {
+      gap: 32px;
+    }
+    .focus-card {
+      padding: 22px;
+    }
+  }
+  @media (max-width: 767px) {
+    .home-stack {
+      gap: 40px;
+    }
+    .hero-grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 32px;
+      padding-top: 16px;
+    }
+    .hero-title {
+      font-size: clamp(36px, 8vw, 56px);
+    }
+    .contact-panel {
+      padding: 24px;
+    }
+    .system-diagram {
+      padding: 22px;
+    }
+  }
+}
+@media print {
+  header,
+  footer,
+  .contact-panel,
+  a[download],
+  button,
+  [role="status"] {
+    display: none !important;
+  }
+  :root,
+  .dark {
+    --background: #fff;
+    --foreground: #111;
+    --muted: #444;
+    --primary: #1744a0;
+    --accent: #f5f7fa;
+    --panel: #fff;
+    --border: #ccc;
+  }
+  .page-container {
+    width: 100%;
+  }
+  .page-main {
+    padding: 0;
+  }
+  .reading-layout {
+    display: block;
+  }
+  .reading-layout > aside {
+    display: none;
+  }
+  .panel,
+  .article-body section {
+    break-inside: avoid;
+  }
 }

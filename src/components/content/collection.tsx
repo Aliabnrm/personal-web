@@ -1,9 +1,9 @@
 "use client";
 import { useDeferredValue, useState } from "react";
 import { Search, X } from "lucide-react";
-import { NoteRow, ResourceRow } from "@/components/notebook/content";
+import { NoteRow, ResourceRow } from "@/components/content/content";
 import { useLocalSet } from "@/hooks/use-local-set";
-import type { Note, Resource } from "@/content/notebook";
+import type { Note, Resource } from "@/content/types";
 import { cn } from "@/lib/utils";
 
 export function Collection({
@@ -116,7 +116,14 @@ export function Collection({
           </button>
         </div>
       ) : kind === "library" ? (
-        filteredResources.map((r) => <ResourceRow key={r.slug} resource={r} />)
+        <section aria-labelledby="resources-title">
+          <h2 id="resources-title" className="sr-only">
+            Resources
+          </h2>
+          {filteredResources.map((r) => (
+            <ResourceRow key={r.slug} resource={r} />
+          ))}
+        </section>
       ) : (
         ["Complete", "In progress", "Idea"].map((status) => {
           const group = filteredNotes.filter((n) => n.status === status);

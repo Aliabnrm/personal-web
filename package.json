@@ -1,22 +1,24 @@
 {
-  "name": "ali-abnar-ai-notebook",
+  "name": "ali-abnar-personal-site",
   "version": "1.0.0",
   "private": true,
   "packageManager": "pnpm@12.16.1",
   "engines": {
-    "node": ">=22.0.0"
+    "node": ">=22.18.0"
   },
   "scripts": {
     "dev": "next dev --hostname 0.0.0.0",
     "build": "next build",
     "start": "next start --hostname 0.0.0.0",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit",
-    "test": "playwright test",
-    "check": "pnpm lint && pnpm typecheck && pnpm build",
+    "typecheck": "next typegen && tsc --noEmit",
+    "test": "pnpm test:unit && pnpm test:e2e",
+    "check": "pnpm lint && pnpm typecheck && pnpm test:unit && pnpm build",
     "sync:github": "node scripts/sync-github.mjs",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "test:unit": "node --test tests/domain.test.mjs",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.2.8",
@@ -43,5 +45,6 @@
     "prettier": "^3.9.10",
     "tailwindcss": "^4.3.5",
     "typescript": "^5.9.3"
-  }
+  },
+  "type": "module"
 }

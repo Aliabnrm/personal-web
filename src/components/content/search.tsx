@@ -3,14 +3,8 @@ import Link from "next/link";
 import { useDeferredValue, useState } from "react";
 import { Search, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-export type SearchItem = {
-  title: string;
-  description: string;
-  type: string;
-  href: string;
-  keywords: string;
-};
-export function NotebookSearch({
+import { searchIndex, type SearchItem } from "@/lib/search";
+export function SiteSearch({
   index,
   initialQuery = "",
 }: {
@@ -21,26 +15,14 @@ export function NotebookSearch({
   const [type, setType] = useState("All");
   const term = useDeferredValue(query).trim().toLowerCase();
   const types = ["All", ...new Set(index.map((i) => i.type))];
-  const results = term
-    ? index.filter(
-        (item) =>
-          (type === "All" || item.type === type) &&
-          term
-            .split(/\s+/)
-            .every((word) =>
-              `${item.title} ${item.description} ${item.keywords}`
-                .toLowerCase()
-                .includes(word),
-            ),
-      )
-    : [];
+  const results = searchIndex(index, term, type);
   return (
     <div>
       <form action="/search" className="relative mb-5">
         <Search size={20} className="absolute left-4 top-[18px] text-primary" />
         <input
           name="q"
-          aria-label="Search the notebook"
+          aria-label="Search the site"
           autoComplete="off"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -77,7 +59,7 @@ export function NotebookSearch({
       <p role="status" className="mb-5 text-xs text-muted">
         {term
           ? `${results.length} ${results.length === 1 ? "result" : "results"} for “${query.trim()}”`
-          : "Search notes, learning paths, resources, weekly issues, and projects."}
+          : "Search case studies, engineering notes, resources, and repositories."}
       </p>
       {!term ? (
         <div className="rounded-md bg-accent p-6">
@@ -104,7 +86,7 @@ export function NotebookSearch({
             No results. A different starting point?
           </h2>
           <p className="mx-auto mt-2 max-w-md text-sm text-muted">
-            Try a shorter phrase or a broader topic. The notebook is still
+            Try a shorter phrase or a broader topic. The collection is still
             growing.
           </p>
           <button

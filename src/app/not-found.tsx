@@ -10,7 +10,7 @@ export default function NotFound() {
       <div className="flex flex-wrap gap-3">
         <ButtonLink href="/">Return home</ButtonLink>
         <ButtonLink variant="outline" href="/search">
-          Search the notebook
+          Search the site
         </ButtonLink>
       </div>
     </div>

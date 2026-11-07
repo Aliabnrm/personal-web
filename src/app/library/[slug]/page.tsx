@@ -2,13 +2,13 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
-import { resources } from "@/content/notebook";
+import { resources } from "@/content/resources";
 import {
   ArticleBody,
   PageIntro,
   TableOfContents,
-} from "@/components/notebook/content";
-import { ReadingTools } from "@/components/notebook/reading-tools";
+} from "@/components/content/content";
+import { ReadingTools } from "@/components/content/reading-tools";
 import { buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 export function generateStaticParams() {
